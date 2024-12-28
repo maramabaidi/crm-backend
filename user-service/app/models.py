@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app import db  # Import db here after it has been initialized in create_app()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

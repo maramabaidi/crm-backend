@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=  # Empty password
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=user_service_db
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"  # Allow empty root password
+      MYSQL_DATABASE: user_service_db
+    ports:
+      - "3307:3306"  # Change port if needed
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

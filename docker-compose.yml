@@ -28,6 +28,33 @@ services:
     networks:
       - app-network
 
+  product-service:
+    build:
+      context: ./product-service  # Update this path to where your product service is located
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"  # Expose product-service port 3002
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/product-db
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"  # Expose MongoDB port (optional)
+    volumes:
+      - mongo-data:/data/db  # Use named volume for persistence
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
